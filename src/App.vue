@@ -2,9 +2,9 @@
   <Header />
 
   <div class="hero">
-    <addCard />
+    <addCard v-if="addProductBoolean" :addProductBoolean="addProductBoolean" />
     <Card />
-    <div class="addproduct">
+    <div class="addproduct" @click="addProductBoolean = !addProductBoolean">
       <button class="addproduct-icon">+</button>
       <p class="addproduct-text">Add product</p>
     </div>
@@ -16,6 +16,8 @@ import { ref } from "vue";
 import Header from "./components/header.vue";
 import addCard from "./components/addCard.vue";
 import Card from "./components/card.vue";
+
+const addProductBoolean = ref(false);
 </script>
 
 <style scoped>
@@ -36,9 +38,10 @@ import Card from "./components/card.vue";
   border-radius: 24px;
   padding: 10px 10px;
   cursor: pointer;
-  position: absolute;
+  position: fixed;
   left: auto;
-  right: 20px;
+  right: 30px;
+  bottom: 10%;
 }
 
 .addproduct-icon {

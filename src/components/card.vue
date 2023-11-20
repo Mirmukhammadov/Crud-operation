@@ -2,15 +2,15 @@
   <div class="container">
     <ul v-for="item in datavalue" :key="item.id" class="card__list">
       <li class="card__item">
-        <p>{{ item.id }}</p>
+        <p>{{ item.product_type_id }}</p>
 
         <p>${{ item.cost }}</p>
         <p>{{ item.name_uz }}</p>
         <p>{{ item.address }}</p>
         <p>{{ item.created_date }}</p>
         <div>
-          <button class="delete__button">delete</button>
-          <button class="edit__button">edit</button>
+          <button class="delete__button" @click="getId(item.id)">delete</button>
+          <button class="edit__button" @click="editProduct">edit</button>
         </div>
       </li>
     </ul>
@@ -19,6 +19,19 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { useProductStore } from "../stores/counter";
+
+const productStore = useProductStore();
+
+function getId(productId) {
+  console.log(productId);
+  productStore.actions.removeProduct(productId);
+}
+
+function editProduct(productId) {
+  console.log(productId);
+  productStore.actions.editProduct(productId);
+}
 
 let datavalue = ref();
 fetch("http://94.158.54.194:9092/api/product")
