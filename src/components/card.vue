@@ -30,11 +30,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useProductStore } from "../stores/counter";
 
 const productStore = useProductStore();
 let editProductId = ref(true);
+let datavalue = ref();
 
 function formatDate(timestamp) {
   const date = new Date(timestamp);
@@ -57,12 +58,10 @@ function editProduct(obj, productId) {
 function saveProduct(obj) {
   editProductId.value = true;
   const { id, product_type_id, cost, name_uz, address } = obj;
-  // console.log(product_type_id, cost, name_uz, address);
 
   productStore.actions.editProduct(id, product_type_id, cost, name_uz, address);
 }
 
-let datavalue = ref();
 fetch("http://94.158.54.194:9092/api/product")
   .then((response) => {
     return response.json();

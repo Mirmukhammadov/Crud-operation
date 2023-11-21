@@ -5,7 +5,7 @@
     <addCard
       v-if="addProductBoolean"
       :class="{ addCardDiv: addProductBoolean }"
-      @submit.prevent="addProductBoolean = false"
+      @checkValues="handleCheckValues"
     />
     <div :class="{ modal: addProductBoolean }">
       <Card />
@@ -24,6 +24,12 @@ import addCard from "./components/addCard.vue";
 import Card from "./components/card.vue";
 
 const addProductBoolean = ref(false);
+
+function handleCheckValues(booleanValue) {
+  if (!booleanValue) {
+    addProductBoolean.value = false;
+  }
+}
 </script>
 
 <style scoped>

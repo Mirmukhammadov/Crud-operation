@@ -20,7 +20,9 @@
       <input type="text" placeholder="address" v-model="newProduct.address" />
       <input type="text" placeholder="Date" v-model="newProduct.created_date" />
       <span v-if="incorrect" class="error">fill the form to add prodict</span>
-      <button type="submit">Add Product</button>
+      <button type="submit" @click="$emit('checkValues', incorrect)">
+        Add Product
+      </button>
     </form>
   </div>
 </template>
