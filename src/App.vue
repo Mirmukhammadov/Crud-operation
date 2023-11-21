@@ -2,11 +2,17 @@
   <Header />
 
   <div class="hero">
-    <addCard v-if="addProductBoolean" :addProductBoolean="addProductBoolean" />
-    <Card />
-    <div class="addproduct" @click="addProductBoolean = !addProductBoolean">
-      <button class="addproduct-icon">+</button>
-      <p class="addproduct-text">Add product</p>
+    <addCard
+      v-if="addProductBoolean"
+      :class="{ addCardDiv: addProductBoolean }"
+      @submit.prevent="addProductBoolean = false"
+    />
+    <div :class="{ modal: addProductBoolean }">
+      <Card />
+      <div class="addproduct" @click="addProductBoolean = true">
+        <button class="addproduct-icon">+</button>
+        <p class="addproduct-text">Add product</p>
+      </div>
     </div>
   </div>
 </template>
@@ -24,6 +30,19 @@ const addProductBoolean = ref(false);
 .hero {
   margin-top: 100px;
   position: relative;
+}
+
+.modal {
+  opacity: 0.5;
+}
+
+.addCardDiv {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  z-index: 1000;
 }
 
 .addproduct {
