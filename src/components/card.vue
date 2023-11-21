@@ -2,15 +2,27 @@
   <div class="container">
     <ul v-for="item in datavalue" :key="item.id" class="card__list">
       <li class="card__item">
-        <p>{{ item.product_type_id }}</p>
-
-        <p>${{ item.cost }}</p>
-        <p>{{ item.name_uz }}</p>
-        <p>{{ item.address }}</p>
-        <p>{{ item.created_date }}</p>
+        <p v-if="editProductId">{{ item.product_type_id }}</p>
+        <input v-else type="number" v-model="item.product_type_id" />
+        <p v-if="editProductId">${{ item.cost }}</p>
+        <input v-else type="text" v-model="item.cost" />
+        <p v-if="editProductId">{{ item.name_uz }}</p>
+        <input v-else type="text" v-model="item.name_uz" />
+        <p v-if="editProductId">{{ item.address }}</p>
+        <input v-else type="text" v-model="item.address" />
+        <p>{{ formatDate(item.created_date) }}</p>
         <div>
           <button class="delete__button" @click="getId(item.id)">delete</button>
-          <button class="edit__button" @click="editProduct">edit</button>
+          <button
+            v-if="editProductId"
+            class="edit__button"
+            @click="editProduct(item, item.id)"
+          >
+            edit
+          </button>
+          <button class="save__button" @click="saveProduct(item)" v-else>
+            save
+          </button>
         </div>
       </li>
     </ul>
@@ -22,15 +34,32 @@ import { ref } from "vue";
 import { useProductStore } from "../stores/counter";
 
 const productStore = useProductStore();
+let editProductId = ref(true);
+
+function formatDate(timestamp) {
+  const date = new Date(timestamp);
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+}
 
 function getId(productId) {
-  console.log(productId);
   productStore.actions.removeProduct(productId);
 }
 
-function editProduct(productId) {
-  console.log(productId);
-  productStore.actions.editProduct(productId);
+function editProduct(obj, productId) {
+  editProductId.value = false;
+
+  // productStore.actions.editProduct(productId);
+}
+
+function saveProduct(obj) {
+  editProductId.value = true;
+  const { id, product_type_id, cost, name_uz, address } = obj;
+  // console.log(product_type_id, cost, name_uz, address);
+
+  productStore.actions.editProduct(id, product_type_id, cost, name_uz, address);
 }
 
 let datavalue = ref();
@@ -40,8 +69,6 @@ fetch("http://94.158.54.194:9092/api/product")
   })
   .then((data) => {
     datavalue.value = data;
-    console.log(data);
-    console.log(datavalue.value);
   });
 </script>
 
@@ -66,6 +93,13 @@ fetch("http://94.158.54.194:9092/api/product")
 .edit__button {
   cursor: pointer;
   background: yellow;
+  border: none;
+  padding: 2px 5px;
+}
+
+.save__button {
+  cursor: pointer;
+  background: rgb(131, 195, 131);
   border: none;
   padding: 2px 5px;
 }

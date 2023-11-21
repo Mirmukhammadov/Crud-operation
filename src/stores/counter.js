@@ -42,11 +42,19 @@ export const useProductStore = defineStore("productStore", () => ({
         .catch((error) => console.log(error, "erorr"));
     },
 
-    editProduct(id) {
+    editProduct(id, product_type_id, cost, name_uz, address) {
       axios
-        .put(`http://94.158.54.194:9092/api/product/${id}`)
-        .then((response) => console.log(response.data))
-        .catch((error) => console.log(error, "erorr"));
+        .put(`http://94.158.54.194:9092/api/product/${id}`, {
+          product_type_id,
+          cost,
+          name_uz,
+          address,
+        })
+        .then((response) => {
+          console.log(response.data);
+          // Optionally, you can perform additional actions after a successful update
+        })
+        .catch((error) => console.log(error, "error"));
     },
   },
 }));

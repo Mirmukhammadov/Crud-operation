@@ -36,7 +36,7 @@ const newProduct = ref({
   cost: 0,
   name_uz: "",
   address: "",
-  created_date: new Date(),
+  created_date: new Date().toISOString(),
 });
 
 const addProduct = () => {
