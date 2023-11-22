@@ -2,19 +2,38 @@
   <div class="container">
     <ul v-for="item in datavalue" :key="item.id" class="card__list">
       <li class="card__item">
-        <p v-if="editProductId">{{ item.product_type_id }}</p>
-        <input v-else type="number" v-model="item.product_type_id" />
-        <p v-if="editProductId">${{ item.cost }}</p>
-        <input v-else type="text" v-model="item.cost" />
-        <p v-if="editProductId">{{ item.name_uz }}</p>
-        <input v-else type="text" v-model="item.name_uz" />
-        <p v-if="editProductId">{{ item.address }}</p>
-        <input v-else type="text" v-model="item.address" />
+        <p v-if="productId !== item.id || editProductId">
+          {{ item.product_type_id }}
+        </p>
+        <input
+          v-else-if="productId === item.id"
+          type="number"
+          v-model="item.product_type_id"
+        />
+
+        <p v-if="productId !== item.id || editProductId">${{ item.cost }}</p>
+        <input
+          v-else-if="productId === item.id"
+          type="text"
+          v-model="item.cost"
+        />
+        <p v-if="productId !== item.id || editProductId">{{ item.name_uz }}</p>
+        <input
+          v-else-if="productId === item.id"
+          type="text"
+          v-model="item.name_uz"
+        />
+        <p v-if="productId !== item.id || editProductId">{{ item.address }}</p>
+        <input
+          v-else-if="productId === item.id"
+          type="text"
+          v-model="item.address"
+        />
         <p>{{ formatDate(item.created_date) }}</p>
         <div>
           <button class="delete__button" @click="getId(item.id)">delete</button>
           <button
-            v-if="editProductId"
+            v-if="productId !== item.id || editProductId"
             class="edit__button"
             @click="editProduct(item, item.id)"
           >
@@ -30,11 +49,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useProductStore } from "../stores/counter";
 
 const productStore = useProductStore();
 let editProductId = ref(true);
+let productId = ref();
 let datavalue = ref();
 
 function formatDate(timestamp) {
@@ -49,16 +69,14 @@ function getId(productId) {
   productStore.actions.removeProduct(productId);
 }
 
-function editProduct(obj, productId) {
+function editProduct(obj, Id) {
   editProductId.value = false;
-
-  // productStore.actions.editProduct(productId);
+  productId.value = Id;
 }
 
 function saveProduct(obj) {
   editProductId.value = true;
   const { id, product_type_id, cost, name_uz, address } = obj;
-
   productStore.actions.editProduct(id, product_type_id, cost, name_uz, address);
 }
 

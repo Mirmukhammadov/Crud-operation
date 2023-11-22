@@ -5,7 +5,7 @@
     <addCard
       v-if="addProductBoolean"
       :class="{ addCardDiv: addProductBoolean }"
-      @checkValues="handleCheckValues"
+      @submit="handleCheckValues"
     />
     <div :class="{ modal: addProductBoolean }">
       <Card />
@@ -25,11 +25,16 @@ import Card from "./components/card.vue";
 
 const addProductBoolean = ref(false);
 
-function handleCheckValues(booleanValue) {
-  if (!booleanValue) {
-    addProductBoolean.value = false;
+const handleCheckValues = (event) => {
+  addProductBoolean.value = false;
+  if (event.key === "Escape" || event.key === "Esc") {
+    addProductBoolean.value = true;
   }
-}
+};
+
+// mounted(() => {
+//   document.addEventListener("keydown", handleCheckValues);
+// });
 </script>
 
 <style scoped>

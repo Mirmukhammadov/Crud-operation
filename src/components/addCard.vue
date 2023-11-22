@@ -6,23 +6,29 @@
         type="number"
         placeholder="id"
         v-model="newProduct.product_type_id"
+        required
       />
       <input
         type="text"
         placeholder="product name"
         v-model="newProduct.name_uz"
+        required
       />
       <input
         type="number"
         placeholder="product cost"
         v-model="newProduct.cost"
+        required
       />
-      <input type="text" placeholder="address" v-model="newProduct.address" />
+      <input
+        type="text"
+        placeholder="address"
+        v-model="newProduct.address"
+        required
+      />
       <input type="text" placeholder="Date" v-model="newProduct.created_date" />
       <span v-if="incorrect" class="error">fill the form to add prodict</span>
-      <button type="submit" @click="$emit('checkValues', incorrect)">
-        Add Product
-      </button>
+      <button type="submit">Add Product</button>
     </form>
   </div>
 </template>
@@ -42,15 +48,7 @@ const newProduct = ref({
 });
 
 const addProduct = () => {
-  if (
-    newProduct.value.product_type_id &&
-    newProduct.value.cost &&
-    newProduct.value.name_uz
-  ) {
-    productStore.actions.addProduct(newProduct.value);
-  } else {
-    incorrect.value = true;
-  }
+  productStore.actions.addProduct(newProduct.value);
 
   newProduct.value = {
     product_type_id: 0,
