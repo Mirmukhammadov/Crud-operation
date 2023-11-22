@@ -67,6 +67,7 @@ function formatDate(timestamp) {
 
 function getId(productId) {
   productStore.actions.removeProduct(productId);
+  window.location.reload();
 }
 
 function editProduct(obj, Id) {

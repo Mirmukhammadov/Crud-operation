@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import Header from "./components/header.vue";
 import addCard from "./components/addCard.vue";
 import Card from "./components/card.vue";
@@ -26,15 +26,18 @@ import Card from "./components/card.vue";
 const addProductBoolean = ref(false);
 
 const handleCheckValues = (event) => {
-  addProductBoolean.value = false;
-  if (event.key === "Escape" || event.key === "Esc") {
-    addProductBoolean.value = true;
+  if (event.key === "Escape" || event.key === "esc") {
+    addProductBoolean.value = false;
   }
 };
 
-// mounted(() => {
-//   document.addEventListener("keydown", handleCheckValues);
-// });
+onMounted(() => {
+  document.addEventListener("keydown", handleCheckValues);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("keydown", handleCheckValues);
+});
 </script>
 
 <style scoped>
