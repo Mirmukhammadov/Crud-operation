@@ -49,8 +49,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onUpdated, ref, onMounted } from "vue";
 import { useProductStore } from "../stores/counter";
+
+onMounted(() => {
+  fetchProducts();
+});
 
 const productStore = useProductStore();
 let editProductId = ref(true);
@@ -65,11 +69,6 @@ function formatDate(timestamp) {
   return `${day}/${month}/${year}`;
 }
 
-function getId(productId) {
-  productStore.actions.removeProduct(productId);
-  window.location.reload();
-}
-
 function editProduct(obj, Id) {
   editProductId.value = false;
   productId.value = Id;
@@ -81,13 +80,22 @@ function saveProduct(obj) {
   productStore.actions.editProduct(id, product_type_id, cost, name_uz, address);
 }
 
-fetch("http://94.158.54.194:9092/api/product")
-  .then((response) => {
-    return response.json();
-  })
-  .then((data) => {
-    datavalue.value = data;
-  });
+function fetchProducts() {
+  fetch("http://94.158.54.194:9092/api/product")
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      datavalue.value = data;
+    });
+}
+
+function getId(productId) {
+  productStore.actions.removeProduct(productId);
+  setTimeout(() => {
+    fetchProducts();
+  }, 1000);
+}
 </script>
 
 <style scoped>
@@ -114,7 +122,6 @@ fetch("http://94.158.54.194:9092/api/product")
   border: none;
   padding: 2px 5px;
 }
-
 .save__button {
   cursor: pointer;
   background: rgb(131, 195, 131);

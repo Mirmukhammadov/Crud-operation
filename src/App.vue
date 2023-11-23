@@ -5,7 +5,7 @@
     <addCard
       v-if="addProductBoolean"
       :class="{ addCardDiv: addProductBoolean }"
-      @submit="handleCheckValues"
+      @submit.prevent="addProductBoolean = false"
     />
     <div :class="{ modal: addProductBoolean }">
       <Card />
@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, onUpdated } from "vue";
 import Header from "./components/header.vue";
 import addCard from "./components/addCard.vue";
 import Card from "./components/card.vue";
